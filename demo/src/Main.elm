@@ -6,26 +6,17 @@ import Html exposing (..)
 import Json.Decode as Decode exposing (Value)
 import Page exposing (Page)
 import Page.Basic as Basic
-import Page.Examples as Examples
-import Page.Home as Home
-import Page.Markdown as Markdown
-import Page.SpecExtension as SpecExtension
-import Page.SpecFromScratch as SpecFromScratch
 import Route exposing (Route)
 import Session exposing (Session(..))
 import Task
 import Url exposing (Url)
+import View
 
 
 type Model
     = Redirect Session
     | NotFound Session
     | Basic Basic.Model
-    | SpecExtension SpecExtension.Model
-    | SpecFromScratch SpecFromScratch.Model
-    | Markdown Markdown.Model
-    | Home Home.Model
-    | Examples Examples.Model
 
 
 type alias Flags =
@@ -45,7 +36,6 @@ init _ url navKey =
 
 -- VIEW
 
-
 view : Model -> Document Msg
 view model =
     let
@@ -60,30 +50,13 @@ view model =
     in
     case model of
         Redirect session ->
-            Page.view Page.Home Home.notFoundView
+            viewPage Page.Basic GotBasicMsg View.notFoundView
 
         NotFound session ->
-            Page.view Page.Home Home.notFoundView
-
-        Home home ->
-            viewPage Page.Home GotHomeMsg (Home.view home)
+            viewPage Page.Basic GotBasicMsg View.notFoundView
 
         Basic basic ->
             viewPage Page.Basic GotBasicMsg (Basic.view basic)
-
-        Markdown md ->
-            viewPage Page.Markdown GotMarkdownMsg (Markdown.view md)
-
-        SpecExtension se ->
-            viewPage Page.SpecExtension GotSpecExtensionMsg (SpecExtension.view se)
-
-        SpecFromScratch sfs ->
-            viewPage Page.SpecFromScratch GotSpecFromScratchMsg (SpecFromScratch.view sfs)
-
-        Examples examples ->
-            viewPage Page.Examples GotExamplesMsg (Examples.view examples)
-
-
 
 -- UPDATE
 
@@ -92,11 +65,6 @@ type Msg
     = ChangedUrl Url
     | ClickedLink Browser.UrlRequest
     | GotBasicMsg Basic.Msg
-    | GotMarkdownMsg Markdown.Msg
-    | GotSpecExtensionMsg SpecExtension.Msg
-    | GotSpecFromScratchMsg SpecFromScratch.Msg
-    | GotExamplesMsg Examples.Msg
-    | GotHomeMsg Home.Msg
     | GotSession Session
 
 
@@ -113,22 +81,6 @@ changeRouteTo maybeRoute model =
         Just Route.Basic ->
             Basic.init session |> updateWith Basic GotBasicMsg model
 
-        Just Route.Markdown ->
-            Markdown.init session |> updateWith Markdown GotMarkdownMsg model
-
-        Just Route.SpecExtension ->
-            SpecExtension.init session |> updateWith SpecExtension GotSpecExtensionMsg model
-
-        Just Route.SpecFromScratch ->
-            SpecFromScratch.init session |> updateWith SpecFromScratch GotSpecFromScratchMsg model
-
-        Just Route.Home ->
-            Home.init session
-                |> updateWith Home GotHomeMsg model
-
-        Just Route.Examples ->
-            Examples.init session
-                |> updateWith Examples GotExamplesMsg model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -162,25 +114,9 @@ update msg model =
         ( ChangedUrl url, _ ) ->
             changeRouteTo (Route.fromUrl url) model
 
-        ( GotHomeMsg subMsg, Home home ) ->
-            Home.update subMsg home
-                |> updateWith Home GotHomeMsg model
-
-        ( GotMarkdownMsg subMsg, Markdown md ) ->
-            Markdown.update subMsg md
-                |> updateWith Markdown GotMarkdownMsg model
-
         ( GotBasicMsg subMsg, Basic basic ) ->
             Basic.update subMsg basic
                 |> updateWith Basic GotBasicMsg model
-
-        ( GotSpecExtensionMsg subMsg, SpecExtension md ) ->
-            SpecExtension.update subMsg md
-                |> updateWith SpecExtension GotSpecExtensionMsg model
-
-        ( GotSpecFromScratchMsg subMsg, SpecFromScratch basic ) ->
-            SpecFromScratch.update subMsg basic
-                |> updateWith SpecFromScratch GotSpecFromScratchMsg model
 
         ( _, _ ) ->
             -- Disregard messages that arrived for the wrong page.
@@ -207,24 +143,8 @@ subscriptions model =
         Redirect _ ->
             Session.changes GotSession (Session.navKey (toSession model))
 
-        Home m ->
-            Sub.map GotHomeMsg (Home.subscriptions m)
-
         Basic m ->
             Sub.map GotBasicMsg (Basic.subscriptions m)
-
-        Markdown m ->
-            Sub.map GotMarkdownMsg (Markdown.subscriptions m)
-
-        Examples m ->
-            Sub.map GotExamplesMsg (Examples.subscriptions m)
-
-        SpecExtension m ->
-            Sub.map GotSpecExtensionMsg (SpecExtension.subscriptions m)
-
-        SpecFromScratch m ->
-            Sub.map GotSpecFromScratchMsg (SpecFromScratch.subscriptions m)
-
 
 
 -- MAIN
@@ -251,20 +171,7 @@ toSession page =
         NotFound session ->
             session
 
-        Home home ->
-            Home.toSession home
 
         Basic basic ->
             Basic.toSession basic
 
-        Markdown full ->
-            Markdown.toSession full
-
-        SpecExtension e ->
-            SpecExtension.toSession e
-
-        SpecFromScratch e ->
-            SpecFromScratch.toSession e
-
-        Examples examples ->
-            Examples.toSession examples

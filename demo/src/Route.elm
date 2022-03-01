@@ -13,22 +13,12 @@ import Url.Parser as Parser exposing ((</>), Parser, oneOf, s)
 
 type Route
     = Basic
-    | Markdown
-    | SpecExtension
-    | SpecFromScratch
-    | Home
-    | Examples
 
 
 parser : Parser (Route -> a) a
 parser =
     oneOf
-        [ Parser.map Home Parser.top
-        , Parser.map Examples (s "examples")
-        , Parser.map Basic (s "examples" </> s "basic")
-        , Parser.map Markdown (s "examples" </> s "markdown")
-        , Parser.map SpecExtension (s "examples" </> s "spec-extension")
-        , Parser.map SpecFromScratch (s "examples" </> s "spec-from-scratch")
+        [ Parser.map Basic Parser.top
         ]
 
 
@@ -67,20 +57,5 @@ routeToString page =
 routeToPieces : Route -> List String
 routeToPieces page =
     case page of
-        Home ->
-            []
-
         Basic ->
-            [ "examples", "basic" ]
-
-        Markdown ->
-            [ "examples", "markdown" ]
-
-        SpecExtension ->
-            [ "examples", "spec-extension" ]
-
-        SpecFromScratch ->
-            [ "examples", "spec-from-scratch" ]
-
-        Examples ->
-            [ "examples" ]
+            [ ]

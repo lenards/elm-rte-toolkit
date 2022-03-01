@@ -20,6 +20,7 @@
     border-width: 0 0 1px 0;
     transform: translate(0%, -100%);
 }
+
 .modal--top.modal-isOpen .modal-container {
     transform: translate(0%, 0%);
 }
@@ -31,6 +32,7 @@
     border-width: 0 0 0 1px;
     transform: translate(100%, 0%);
 }
+
 .modal--right.modal-isOpen .modal-container {
     transform: translate(0%, 0%);
 }
@@ -42,6 +44,7 @@
     border-width: 1px 0 0 0;
     transform: translate(0%, 100%);
 }
+
 .modal--bottom.modal-isOpen .modal-container {
     transform: translate(0%, 0%);
 }
@@ -53,6 +56,7 @@
     border-width: 0 1px 0 0;
     transform: translate(-100%, 0%);
 }
+
 .modal--left.modal-isOpen .modal-container {
     transform: translate(0%, 0%);
 }
@@ -63,11 +67,12 @@
     top: 0;
     left: 0;
     width: 100%;
-    background: rgba(0,0,0,0);
+    background: rgba(0, 0, 0, 0);
     z-index: 100;
     display: none;
 }
+
 .modal-isOpen .modal-backdrop {
-    background: rgba(0,0,0,0.4);
+    background: rgba(0, 0, 0, 0.4);
     display: block;
 }

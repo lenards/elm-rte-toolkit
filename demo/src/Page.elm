@@ -15,11 +15,6 @@ under Other.
 -}
 type Page
     = Basic
-    | Markdown
-    | SpecExtension
-    | SpecFromScratch
-    | Home
-    | Examples
 
 
 {-| Take a page's Html and frames it with a header and footer.
@@ -50,15 +45,7 @@ viewContent content =
 
 viewHeader : Page -> Html msg
 viewHeader page =
-    header []
-        [ nav []
-            [ a [ class "logo", Route.href Route.Home ]
-                [ text "Rich Text Editor Toolkit" ]
-            , div [ class "nav-links" ] <|
-                navbarLink page Route.Home [ text "Home" ]
-                    :: viewMenu page
-            ]
-        ]
+    header [] []
 
 
 viewMenu : Page -> List (Html msg)
@@ -67,8 +54,7 @@ viewMenu page =
         linkTo =
             navbarLink page
     in
-    [ linkTo Route.Examples [ text "Examples" ]
-    , navbarExternalLink "https://github.com/mweiss/elm-rte-toolkit" [ text "Github" ]
+    [ navbarExternalLink "https://github.com/mweiss/elm-rte-toolkit" [ text "Github" ]
     ]
 
 
@@ -98,14 +84,5 @@ navbarExternalLink href linkContent =
 isActive : Page -> Route -> Bool
 isActive page route =
     case ( page, route ) of
-        ( Home, Route.Home ) ->
-            True
-
         ( Basic, Route.Basic ) ->
             True
-
-        ( Markdown, Route.Markdown ) ->
-            True
-
-        _ ->
-            False

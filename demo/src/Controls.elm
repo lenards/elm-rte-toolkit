@@ -418,13 +418,7 @@ editorControlPanel styles editor =
             (inlineElementButtons controlState
                 ++ blockElements controlState
             )
-        , div
-            [ class "rte-controls" ]
-          <|
-            headerElements controlState
-        , div
-            [ class "rte-controls" ]
-          <|
+        , div [ class "rte-controls" ] <|
             undoRedo controlState
         ]
 

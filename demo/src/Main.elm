@@ -171,7 +171,6 @@ toSession page =
         NotFound session ->
             session
 
-
         Basic basic ->
             Basic.toSession basic
 

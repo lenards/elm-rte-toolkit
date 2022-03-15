@@ -35,21 +35,6 @@ view model =
     { title = "Basic"
     , content =
         [ h1 [] [ text "Basic example" ]
-        , p []
-            [ text """You can use this package to create all sorts of editors. Trying to write
-                    one from scratch can be a little overwhelming though, so the package provides a
-                    default spec and default commands as a jumping off point for your own editor.
-                    In this example, we use the default spec to create an editor which supports
-                    things like headers, lists, as well as links and images."""
-            ]
-        , p []
-            [ text "You can see the code for this example in the "
-            , a
-                [ title "git repo"
-                , href (rteToolkit ++ "/tree/master/demo/src/Page/Basic.elm")
-                ]
-                [ text "git repo." ]
-            ]
         , Html.map EditorMsg (Editor.view config model.editor)
         ]
     }
@@ -85,4 +70,5 @@ toSession model =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Session.changes GotSession (Session.navKey model.session)
+    --Session.changes GotSession (Session.navKey model.session)
+    Sub.none

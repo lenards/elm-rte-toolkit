@@ -54,6 +54,9 @@ update msg model =
     case msg of
         EditorMsg editorMsg ->
             let
+                _ =
+                    Debug.log "editorMsg" editorMsg
+
                 ( e, _ ) =
                     Editor.update config editorMsg model.editor
             in

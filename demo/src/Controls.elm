@@ -333,6 +333,9 @@ deriveControlState editor =
         state_ =
             state editor
 
+        _ =
+            Debug.log "state of editor" state_
+
         history_ =
             history editor
     in
